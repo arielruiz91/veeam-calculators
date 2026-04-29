@@ -2,382 +2,314 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Backup Calculator — Machines (VBR)</title>
-  <meta name="description" content="Backup repository sizing calculator for virtual and physical machines protected with Veeam Backup &amp; Replication." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Calculator - VM</title>
+  <meta name="description" content="Sizing calculator for VM, agent and replication workloads with Veeam Backup &amp; Replication." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="#" class="brand" aria-label="Backup Calculator home">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
-            <path d="M4 6 L16 28 L28 6 L22 6 L16 18 L10 6 Z" fill="#00B336"/>
-          </svg>
-        </span>
-        <span class="brand-name">Backup<span class="brand-accent">Calc</span></span>
-      </a>
-      <nav class="primary-nav" aria-label="Primary">
-        <ul>
-          <li><a href="#calculator">Calculator</a></li>
-          <li><a href="#how">How it works</a></li>
-          <li><a href="#about">About</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <div class="bg-pattern" aria-hidden="true"></div>
 
-  <section class="hero">
-    <div class="container">
-      <p class="eyebrow">VBR · Simple Calculator</p>
-      <h1>Backup Calculator for Machines</h1>
-      <p class="lede">Estimate the repository capacity required to back up your virtual and physical machines. Set retention, change rate and tier preferences to forecast on-prem and capacity tier storage needs.</p>
-    </div>
-  </section>
+  <div class="layout">
+    <!-- ============== HEADER ============== -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn icon-btn-light" aria-label="Toggle menu" id="navToggle"><i class="material-icons">menu</i></button>
+        <a class="icon-btn icon-btn-light" href="#" aria-label="Home"><i class="material-icons">home</i></a>
+        <h1 class="topbar-title">Calculator - VM</h1>
+      </div>
+      <div class="topbar-right">
+        <a href="#" class="brand-mark" aria-label="Brand">
+          <span class="brand-dot"></span>
+          <span class="brand-text">CALC</span>
+        </a>
+      </div>
+    </header>
 
-  <main class="container main-grid" id="calculator">
-    <aside class="stepper" aria-label="Calculator steps">
-      <ol>
-        <li class="step is-active" data-step="1">
-          <span class="step-num">1</span>
-          <span class="step-label">Workload</span>
+    <!-- ============== LEFT SIDEBAR ============== -->
+    <aside class="sidebar" id="sidebar">
+      <ul class="side-nav">
+        <li class="side-item is-active" title="Calculator">
+          <a href="#"><i class="material-icons">looks_one</i></a>
+          <ul class="side-sub">
+            <li class="is-active" title="Data Center"><a href="#"><i class="material-icons">business</i></a></li>
+            <li title="Veeam Data Cloud"><a href="#"><i class="material-icons">backup</i></a></li>
+            <li title="SaaS"><a href="#"><i class="material-icons">wysiwyg</i></a></li>
+            <li title="Public Cloud"><a href="#"><i class="material-icons">cloud_queue</i></a></li>
+            <li title="Monitoring"><a href="#"><i class="material-icons">query_stats</i></a></li>
+          </ul>
         </li>
-        <li class="step" data-step="2">
-          <span class="step-num">2</span>
-          <span class="step-label">Protection policy</span>
+        <li class="side-item" title="Scenario Builder">
+          <a href="#"><i class="material-icons">dashboard_customize</i></a>
         </li>
-        <li class="step" data-step="3">
-          <span class="step-num">3</span>
-          <span class="step-label">Capacity tier</span>
+        <li class="side-item" title="Maps">
+          <a href="#"><i class="material-icons">map</i></a>
         </li>
-        <li class="step" data-step="4">
-          <span class="step-num">4</span>
-          <span class="step-label">Advanced</span>
-        </li>
-        <li class="step" data-step="5">
-          <span class="step-num">5</span>
-          <span class="step-label">Results</span>
-        </li>
-      </ol>
+      </ul>
+      <button class="icon-btn side-back" aria-label="Back"><i class="material-icons">west</i></button>
     </aside>
 
-    <form class="calc-form" id="calcForm" novalidate>
-      <!-- STEP 1: WORKLOAD -->
-      <fieldset class="card panel" data-panel="1">
-        <legend class="panel-title">
-          <span class="panel-eyebrow">Step 1</span>
-          <span>Tell us about your workload</span>
-        </legend>
+    <!-- ============== MAIN BODY ============== -->
+    <main class="body">
+      <!-- Tabs -->
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" role="tab" aria-selected="true">Machines</button>
+        <button class="tab" role="tab">Unstructured</button>
+        <button class="tab" role="tab">Databases</button>
+        <button class="tab" role="tab">Tape</button>
+        <button class="tab" role="tab">Backup Server</button>
+      </div>
 
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">
-              Source type
-              <button type="button" class="info" data-tip="Choose the type of machine you protect. Sizing assumptions vary slightly between virtual and physical workloads.">i</button>
-            </span>
-            <select id="sourceType" name="sourceType">
-              <option value="vm">Virtual machines (VMware / Hyper-V)</option>
-              <option value="physical">Physical servers (agent based)</option>
-              <option value="cloud">Cloud instances (AWS / Azure / GCP)</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">
-              Operation
-              <button type="button" class="info" data-tip="Backup writes restore points to a repository. Replication keeps a ready-to-run VM copy at a target host.">i</button>
-            </span>
-            <select id="operation" name="operation">
-              <option value="backup">Backup</option>
-              <option value="replication">Replication</option>
-            </select>
+      <!-- Operation buttons + reset/advanced -->
+      <div class="ops-row">
+        <div class="op-bar" role="toolbar">
+          <button class="op is-active" data-op="vm-backup">VM Backup</button>
+          <button class="op" data-op="agent">Agent Backup</button>
+          <button class="op" data-op="vm-rep">VM Replication</button>
+          <button class="op" data-op="cdp">CDP Replication</button>
+        </div>
+        <div class="ops-actions">
+          <button class="btn-text" id="resetBtn"><i class="material-icons">restart_alt</i><span>Reset fields</span></button>
+          <label class="switch-inline">
+            <span class="switch-label">Advanced</span>
+            <input type="checkbox" id="advancedToggle" checked>
+            <span class="switch-track"><span class="switch-thumb"></span></span>
           </label>
         </div>
+      </div>
 
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">
-              Number of machines
-              <button type="button" class="info" data-tip="Total count of machines covered by this job.">i</button>
-            </span>
-            <input type="number" id="vmCount" name="vmCount" min="1" step="1" value="50" />
-          </label>
+      <!-- Form: 4 cards -->
+      <form id="calcForm" class="cards-grid" novalidate>
+        <!-- DATA SOURCE -->
+        <section class="card">
+          <h2 class="card-title">Data Source</h2>
+          <hr class="card-divider">
 
-          <label class="field">
-            <span class="field-label">
-              Average size per machine
-              <button type="button" class="info" data-tip="Used (consumed) data per machine, not the provisioned disk size.">i</button>
-            </span>
-            <div class="input-suffix">
-              <input type="number" id="avgSize" name="avgSize" min="1" step="1" value="200" />
-              <select id="avgSizeUnit" name="avgSizeUnit" aria-label="Unit">
-                <option value="GB" selected>GB</option>
-                <option value="TB">TB</option>
-              </select>
+          <div class="field">
+            <i class="material-icons field-icon">storage</i>
+            <input type="number" id="sourceData" min="0" max="1024000" value="20" placeholder=" ">
+            <label for="sourceData">Source data</label>
+            <div class="field-end">
+              <span class="caption">TB</span>
+              <i class="material-icons info-icon" data-tip="Total used (consumed) data of all machines in the job, expressed in TB.">info</i>
             </div>
-          </label>
-        </div>
-      </fieldset>
+          </div>
 
-      <!-- STEP 2: PROTECTION POLICY -->
-      <fieldset class="card panel" data-panel="2">
-        <legend class="panel-title">
-          <span class="panel-eyebrow">Step 2</span>
-          <span>Define the protection policy</span>
-        </legend>
-
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">
-              Backup mode
-              <button type="button" class="info" data-tip="Forever Forward Incremental keeps a single full plus daily incrementals. Forward Incremental adds periodic active fulls. Reverse Incremental keeps the last full as the most recent point.">i</button>
-            </span>
-            <select id="backupMode" name="backupMode">
-              <option value="forwardIncremental">Forward incremental (with active full)</option>
-              <option value="foreverForward" selected>Forever forward incremental</option>
-              <option value="reverseIncremental">Reverse incremental</option>
-              <option value="syntheticFull">Synthetic full (weekly)</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">
-              Retention (restore points)
-              <button type="button" class="info" data-tip="Number of restore points to keep on the performance tier. Typical values are 7, 14 or 30.">i</button>
-            </span>
-            <input type="number" id="retention" name="retention" min="1" step="1" value="14" />
-          </label>
-        </div>
-
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">
-              Daily change rate
-              <button type="button" class="info" data-tip="Average percentage of data that changes between two consecutive incrementals. 5% is a typical default for general workloads.">i</button>
-            </span>
-            <div class="input-suffix">
-              <input type="number" id="changeRate" name="changeRate" min="0" max="100" step="0.5" value="5" />
-              <span class="suffix">%</span>
+          <div class="field">
+            <i class="material-icons field-icon">percent</i>
+            <input type="number" id="changeRate" min="0" max="100" step="0.1" value="5" placeholder=" ">
+            <label for="changeRate">Daily change rate</label>
+            <div class="field-end">
+              <span class="caption">%</span>
+              <div class="select-bar small" data-target="changeRate">
+                <button type="button" data-val="3">Low</button>
+                <button type="button" data-val="5" class="is-active">Avg</button>
+                <button type="button" data-val="10">High</button>
+              </div>
+              <i class="material-icons info-icon" data-tip="Percentage of data that changes between two consecutive incrementals. Avg ≈ 5%.">info</i>
             </div>
-          </label>
+          </div>
+        </section>
 
-          <label class="field checkbox-field">
-            <input type="checkbox" id="immutability" name="immutability" />
-            <span>Enable immutability (hardened repository / object lock)</span>
-          </label>
-        </div>
+        <!-- POLICY -->
+        <section class="card">
+          <h2 class="card-title">Policy</h2>
+          <hr class="card-divider">
 
-        <div class="field-row" id="immutabilityRow" hidden>
-          <label class="field">
-            <span class="field-label">
-              Immutability period (days)
-              <button type="button" class="info" data-tip="Restore points cannot be deleted or modified for this many days. Adds extra storage required to keep them.">i</button>
-            </span>
-            <input type="number" id="immutabilityDays" name="immutabilityDays" min="1" step="1" value="7" />
-          </label>
-        </div>
-      </fieldset>
+          <div class="field">
+            <i class="material-icons field-icon">hourglass_empty</i>
+            <input type="number" id="backupWindow" min="1" max="336" value="8" placeholder=" ">
+            <label for="backupWindow">Backup window</label>
+            <div class="field-end">
+              <span class="caption">hours</span>
+              <div class="select-bar small" data-target="backupWindow">
+                <button type="button" data-val="8" class="is-active">Avg</button>
+                <button type="button" data-val="14">Long</button>
+              </div>
+              <i class="material-icons info-icon" data-tip="Available window per night to complete the backup.">info</i>
+            </div>
+          </div>
 
-      <!-- STEP 3: CAPACITY TIER -->
-      <fieldset class="card panel" data-panel="3">
-        <legend class="panel-title">
-          <span class="panel-eyebrow">Step 3</span>
-          <span>Capacity tier (Scale-Out Backup Repository)</span>
-        </legend>
-
-        <label class="field checkbox-field">
-          <input type="checkbox" id="capacityTier" name="capacityTier" />
-          <span>Offload older restore points to a capacity tier (object storage)</span>
-        </label>
-
-        <div id="capacityTierBlock" hidden>
-          <div class="field-row">
-            <label class="field">
-              <span class="field-label">
-                Tier mode
-                <button type="button" class="info" data-tip="Move sends data to object storage and removes it locally. Copy keeps a synchronous copy on both tiers.">i</button>
-              </span>
-              <select id="capacityMode" name="capacityMode">
-                <option value="move" selected>Move (after operational restore window)</option>
-                <option value="copy">Copy (immediate)</option>
-                <option value="both">Copy + Move</option>
-              </select>
-            </label>
-
-            <label class="field">
-              <span class="field-label">
-                Operational restore window (days)
-                <button type="button" class="info" data-tip="Recent restore points stay on the performance tier this long before being moved to object storage.">i</button>
-            </span>
-              <input type="number" id="operationalWindow" name="operationalWindow" min="1" step="1" value="14" />
+          <div class="toggle-row">
+            <i class="material-icons">cloud</i>
+            <span class="row-label">Direct to object storage?</span>
+            <label class="switch">
+              <input type="checkbox" id="directToObject">
+              <span class="switch-track"><span class="switch-thumb"></span></span>
             </label>
           </div>
 
-          <div class="field-row">
-            <label class="field checkbox-field">
-              <input type="checkbox" id="useGFS" name="useGFS" />
-              <span>Use GFS retention (long-term archival)</span>
+          <div class="toggle-row">
+            <i class="material-icons">switch_access_2</i>
+            <span class="row-label">ReFS/XFS?</span>
+            <label class="check">
+              <input type="checkbox" id="refsXfs" checked>
+              <span class="check-box"><i class="material-icons">check</i></span>
             </label>
           </div>
 
-          <div id="gfsBlock" hidden>
-            <div class="field-row">
-              <label class="field">
-                <span class="field-label">Weekly fulls (weeks)</span>
-                <input type="number" id="gfsWeekly" min="0" step="1" value="4" />
-              </label>
-              <label class="field">
-                <span class="field-label">Monthly fulls (months)</span>
-                <input type="number" id="gfsMonthly" min="0" step="1" value="12" />
-              </label>
-            </div>
-            <div class="field-row">
-              <label class="field">
-                <span class="field-label">Quarterly fulls (quarters)</span>
-                <input type="number" id="gfsQuarterly" min="0" step="1" value="0" />
-              </label>
-              <label class="field">
-                <span class="field-label">Yearly fulls (years)</span>
-                <input type="number" id="gfsYearly" min="0" step="1" value="3" />
-              </label>
+          <div class="toggle-row">
+            <i class="material-icons">photo_size_select_small</i>
+            <span class="row-label">Capacity Tier?</span>
+            <label class="switch">
+              <input type="checkbox" id="capacityTier">
+              <span class="switch-track"><span class="switch-thumb"></span></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <i class="material-icons">lock</i>
+            <span class="row-label">Enable immutability?</span>
+            <label class="check">
+              <input type="checkbox" id="immutability">
+              <span class="check-box"><i class="material-icons">check</i></span>
+            </label>
+          </div>
+        </section>
+
+        <!-- RETENTION -->
+        <section class="card">
+          <h2 class="card-title">Retention</h2>
+          <hr class="card-divider">
+
+          <div class="field">
+            <i class="material-icons field-icon">calendar_view_day</i>
+            <input type="number" id="retDays" min="0" max="9999" value="14" placeholder=" ">
+            <label for="retDays">Days</label>
+            <div class="field-end">
+              <span class="caption">dailies</span>
+              <i class="material-icons info-icon" data-tip="Number of daily restore points to keep on the performance tier.">info</i>
             </div>
           </div>
-        </div>
-      </fieldset>
 
-      <!-- STEP 4: ADVANCED -->
-      <fieldset class="card panel" data-panel="4">
-        <legend class="panel-title">
-          <span class="panel-eyebrow">Step 4</span>
-          <span>Advanced (compression, dedup, growth)</span>
-        </legend>
-
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">
-              Compression + dedupe ratio
-              <button type="button" class="info" data-tip="Typical mixed workloads achieve 2:1. File servers and VDI may reach 4:1. Pre-compressed media yields ~1.1:1.">i</button>
-            </span>
-            <select id="compression" name="compression">
-              <option value="1">1:1 — no reduction</option>
-              <option value="1.5">1.5:1 — pre-compressed media</option>
-              <option value="2" selected>2:1 — typical (default)</option>
-              <option value="3">3:1 — file servers</option>
-              <option value="4">4:1 — VDI / similar OS</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">
-              Annual data growth
-              <button type="button" class="info" data-tip="Forecasted year-over-year increase of the source data set.">i</button>
-            </span>
-            <div class="input-suffix">
-              <input type="number" id="growthRate" name="growthRate" min="0" max="200" step="1" value="10" />
-              <span class="suffix">%</span>
+          <details class="gfs">
+            <summary>
+              <span class="gfs-title"><i class="material-icons">archive</i> GFS</span>
+              <i class="material-icons gfs-toggle">add</i>
+            </summary>
+            <div class="gfs-body">
+              <div class="field">
+                <i class="material-icons field-icon">calendar_view_week</i>
+                <input type="number" id="retWeeks" min="0" max="364" value="0" placeholder=" ">
+                <label for="retWeeks">Weeks</label>
+                <div class="field-end">
+                  <span class="caption">weeklies</span>
+                  <i class="material-icons info-icon" data-tip="Weekly fulls retained for long-term restore.">info</i>
+                </div>
+              </div>
+              <div class="field">
+                <i class="material-icons field-icon">calendar_view_month</i>
+                <input type="number" id="retMonths" min="0" max="84" value="0" placeholder=" ">
+                <label for="retMonths">Months</label>
+                <div class="field-end">
+                  <span class="caption">monthlies</span>
+                  <i class="material-icons info-icon" data-tip="Monthly fulls retained for long-term restore.">info</i>
+                </div>
+              </div>
+              <div class="field">
+                <i class="material-icons field-icon">grid_on</i>
+                <input type="number" id="retYears" min="0" max="100" value="0" placeholder=" ">
+                <label for="retYears">Years</label>
+                <div class="field-end">
+                  <span class="caption">yearlies</span>
+                  <i class="material-icons info-icon" data-tip="Yearly fulls retained for long-term restore.">info</i>
+                </div>
+              </div>
             </div>
-          </label>
-        </div>
+          </details>
+        </section>
 
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">
-              Forecast horizon
-              <button type="button" class="info" data-tip="Number of years to project storage requirements with the growth rate above.">i</button>
-            </span>
-            <div class="input-suffix">
-              <input type="number" id="forecastYears" name="forecastYears" min="1" max="10" step="1" value="3" />
-              <span class="suffix">years</span>
+        <!-- ADVANCED -->
+        <section class="card" id="advancedCard">
+          <h2 class="card-title">Advanced</h2>
+          <hr class="card-divider">
+
+          <div class="field">
+            <i class="material-icons field-icon">timeline</i>
+            <input type="number" id="forecastYears" min="0" max="100" value="3" placeholder=" ">
+            <label for="forecastYears">Forecast period</label>
+            <div class="field-end">
+              <span class="caption">years</span>
+              <i class="material-icons info-icon" data-tip="Years to forecast storage growth for.">info</i>
             </div>
-          </label>
-        </div>
-      </fieldset>
+          </div>
 
-      <div class="actions">
-        <button type="button" class="btn btn-ghost" id="resetBtn">Reset</button>
-        <button type="submit" class="btn btn-primary" id="calcBtn">Calculate</button>
+          <div class="field">
+            <i class="material-icons field-icon">trending_up</i>
+            <input type="number" id="growthRate" min="0" max="100" step="0.1" value="10" placeholder=" ">
+            <label for="growthRate">Growth rate</label>
+            <div class="field-end">
+              <span class="caption">%</span>
+              <div class="select-bar small" data-target="growthRate">
+                <button type="button" data-val="5">5%</button>
+                <button type="button" data-val="10" class="is-active">10%</button>
+                <button type="button" data-val="15">15%</button>
+              </div>
+              <i class="material-icons info-icon" data-tip="Yearly increase of source data.">info</i>
+            </div>
+          </div>
+
+          <div class="field">
+            <i class="material-icons field-icon">compress</i>
+            <input type="number" id="compression" min="0" max="100" step="0.1" value="50" placeholder=" ">
+            <label for="compression">Compress by</label>
+            <div class="field-end">
+              <span class="caption">%</span>
+              <div class="select-bar small" data-target="compression">
+                <button type="button" data-val="0">None</button>
+                <button type="button" data-val="50" class="is-active">Avg</button>
+              </div>
+              <i class="material-icons info-icon" data-tip="Combined compression and dedupe. 50% ≈ 2:1.">info</i>
+            </div>
+          </div>
+        </section>
+
+        <!-- ESTIMATE BUTTON -->
+        <button type="submit" class="btn-primary estimate" title="Submit (Ctrl+Enter)">
+          <i class="material-icons">calculate</i>
+          <span>ESTIMATE</span>
+        </button>
+      </form>
+    </main>
+
+    <!-- ============== RIGHT SIDEBAR (RESULTS) ============== -->
+    <aside class="results" id="results">
+      <div class="results-head">
+        <h2>Results</h2>
+        <button class="icon-btn" aria-label="Collapse results"><i class="material-icons">east</i></button>
       </div>
-    </form>
-
-    <!-- RESULTS -->
-    <section class="card results" id="results" aria-live="polite" data-panel="5">
-      <header class="results-header">
-        <span class="panel-eyebrow">Step 5</span>
-        <h2>Estimated repository capacity</h2>
-        <p class="results-sub">Numbers are approximate, based on the assumptions you provided.</p>
-      </header>
-
-      <div class="results-grid">
-        <div class="result-tile">
-          <span class="result-label">Source data (used)</span>
-          <span class="result-value" id="rSource">—</span>
-        </div>
-        <div class="result-tile is-primary">
-          <span class="result-label">Performance tier</span>
-          <span class="result-value" id="rPerformance">—</span>
-          <span class="result-meta" id="rPerformanceMeta">Local repository</span>
-        </div>
-        <div class="result-tile">
-          <span class="result-label">Capacity tier</span>
-          <span class="result-value" id="rCapacity">—</span>
-          <span class="result-meta" id="rCapacityMeta">Object storage</span>
-        </div>
-        <div class="result-tile">
-          <span class="result-label">Total backup footprint</span>
-          <span class="result-value" id="rTotal">—</span>
-          <span class="result-meta" id="rTotalMeta">Performance + capacity</span>
-        </div>
+      <button class="btn-text danger" id="clearResults"><i class="material-icons">delete_forever</i><span>Clear all</span></button>
+      <div class="results-list" id="resultsList">
+        <p class="results-empty">No estimates yet. Click <strong>ESTIMATE</strong> to compute.</p>
       </div>
+    </aside>
 
-      <div class="results-breakdown">
-        <h3>Breakdown</h3>
-        <table>
-          <tbody id="breakdownBody">
-            <tr><td>Full backup size</td><td id="bFull">—</td></tr>
-            <tr><td>Daily incremental size</td><td id="bIncremental">—</td></tr>
-            <tr><td>Restore points kept on performance tier</td><td id="bPerfPoints">—</td></tr>
-            <tr><td>Restore points offloaded to capacity tier</td><td id="bCapPoints">—</td></tr>
-            <tr><td>GFS long-term restore points</td><td id="bGfsPoints">—</td></tr>
-            <tr><td>Forecasted size after growth</td><td id="bForecast">—</td></tr>
-          </tbody>
-        </table>
+    <!-- ============== FOOTER ============== -->
+    <footer class="footer">
+      <ul class="foot-nav">
+        <li class="is-active"><i class="material-icons">business</i><span>Data Center</span></li>
+        <li><i class="material-icons">backup</i><span>Veeam Data Cloud</span></li>
+        <li><i class="material-icons">wysiwyg</i><span>SaaS</span></li>
+        <li><i class="material-icons">cloud_queue</i><span>Public Cloud</span></li>
+        <li><i class="material-icons">query_stats</i><span>Monitoring</span></li>
+      </ul>
+      <div class="foot-bottom">
+        <span class="copy">© 2026</span>
+        <span class="ver">1.5.0</span>
+        <button class="icon-btn" aria-label="Reload"><i class="material-icons">refresh</i></button>
+        <button class="icon-btn" aria-label="Shortcuts"><i class="material-icons">keyboard</i></button>
+        <button class="icon-btn" aria-label="Release notes"><i class="material-icons">source_notes</i></button>
+        <button class="btn-outline"><i class="material-icons">feedback</i><span>Send feedback</span></button>
       </div>
-    </section>
-  </main>
+    </footer>
+  </div>
 
-  <section class="explainer" id="how">
-    <div class="container">
-      <h2>How the calculation works</h2>
-      <div class="explainer-grid">
-        <article>
-          <h3>Source data</h3>
-          <p>Number of machines × average used size per machine. This is the working set the backup job must protect.</p>
-        </article>
-        <article>
-          <h3>Full backup size</h3>
-          <p>Source data divided by the configured compression and deduplication ratio. The default of 2:1 is a typical mixed-workload assumption.</p>
-        </article>
-        <article>
-          <h3>Incrementals</h3>
-          <p>Each incremental approximates <em>full × daily change rate</em>. Restore points beyond the first full add (retention − 1) incrementals to the performance tier.</p>
-        </article>
-        <article>
-          <h3>GFS &amp; capacity tier</h3>
-          <p>GFS adds weekly, monthly, quarterly and yearly fulls on the capacity tier. Move policies relocate older points off the performance tier after the operational restore window.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <footer class="site-footer" id="about">
-    <div class="container footer-inner">
-      <p>Independent backup sizing calculator. Based on publicly documented Veeam Backup &amp; Replication sizing guidance. Not affiliated with Veeam Software.</p>
-      <p class="muted">Estimates only. Always validate with a proof of concept before procurement.</p>
-    </div>
-  </footer>
-
-  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
 
   <script src="script.js"></script>
 </body>
